@@ -31,6 +31,9 @@ class Administrador:
         self.email = email
         self.senha = senha
 
+    def listarADM(self):
+        return f"{self.nome} | {self.email}"
+
 class Turma:
     def __init__(self, ano: int, alunos, professores, disciplinas):
         self.ano = ano
@@ -54,7 +57,7 @@ class Turma:
 
 class Disciplina:
     def __init__(self, nome: str, sigla: str, cargaHoraria: int, aulas):
-        self,nome = nome
+        self.nome = nome
         self.sigla = sigla
         self.cargaHoraria = cargaHoraria
         self.aulas = aulas
@@ -71,3 +74,26 @@ class Conteudo:
         self.titulo = titulo
         self.referencias = referencias
         self.fonte = fonte
+
+class Resumo:
+    def __init__(self, titulo: str, materia: str, data: str,
+                 resumo: str, referencias: str, fonte: str, professor):
+
+        self.titulo = titulo
+        self.materia = materia
+        self.data = data
+        self.resumo = resumo
+        self.referencias = referencias
+        self.fonte = fonte
+        self.professor = professor
+
+    def listarResumo(self):
+        return f"""
+        Título: {self.titulo}
+        Matéria: {self.materia}
+        Data: {self.data}
+        Resumo: {self.resumo}
+        Referências: {self.referencias}
+        Fonte: {self.fonte}
+        Professor: {self.professor.nome}
+        """

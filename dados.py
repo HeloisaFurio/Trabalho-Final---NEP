@@ -1,0 +1,7 @@
+alunos = []
+professores = []
+administradores = []
+turmas = []
+disciplinas = []
+conteudos = []
+resumos = []
