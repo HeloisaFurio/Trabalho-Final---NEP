@@ -38,5 +38,11 @@ while opcao_escolhida != 0:
 
     if opcao_escolhida == 1:
         limpar_tela()
-        print("O projeto é um curso local, gratuito e anual de formação política, voltado principalmente para jovens, com aulas semanais e apoio de uma plataforma online própria. Com foco na pluralidade de ideias, transparência e fontes confiáveis, a iniciativa busca desenvolver o pensamento crítico sem defender uma ideologia específica, preparando os alunos para uma participação cidadã mais consciente.")
+        print("""O projeto é um curso local, gratuito e anual
+ de formação política, voltado principalmente para
+ jovens, com aulas semanais e apoio de uma plataforma
+online própria. Com foco na pluralidade de ideias, transparência
+e fontes confiáveis, a iniciativa busca desenvolver o pensamento crítico
+sem defender uma ideologia específica, preparando os alunos para
+uma participação cidadã mais consciente.""")
         input("Pressione ENTER para voltar...")
