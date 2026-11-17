@@ -1,6 +1,36 @@
-from classes import Administrador
+from classes import *
 import os
 import dados
+
+from classes import Aluno
+import dados
+
+def cadastroAluno():
+    limpar_tela()
+    print("===== CADASTRO DE ALUNO =====")
+
+    nome = input("Nome completo: ")
+    email = input("E-mail: ")
+    senha = input("Senha: ")
+
+    for aluno in dados.alunos:
+        if aluno.email == email:
+            print("Já existe um aluno cadastrado com esse e-mail!")
+            input("\nPressione ENTER para voltar...")
+            return
+
+    for cadastro in dados.cadastrosPendentes:
+        if cadastro.email == email:
+            print("Já existe uma solicitação com esse e-mail!")
+            input("\nPressione ENTER para voltar...")
+            return
+
+    novo_aluno = Aluno(0, nome, email, senha)
+
+    dados.cadastrosPendentes.append(novo_aluno)
+
+    print("\nSolicitação de cadastro enviada!")
+    print("Aguarde a aprovação de um administrador.")
 
 helo = Administrador("Heloisa Furio Castilho", "heloisa.fc14@aluno.ifsc.edu.br", "1410")
 juh = Administrador("Julia Zulian Lima", "julia.zl2010@aluno.ifsc.edu.br", "2201")
@@ -80,4 +110,8 @@ uma participação cidadã mais consciente.""")
             for resumo in dados.resumos:
                 print(resumo.listarResumo())
                 print("-----------------------------")
+        input("\nPressione ENTER para voltar...")
+
+    elif opcao_escolhida == 5:
+        cadastroAluno()
         input("\nPressione ENTER para voltar...")

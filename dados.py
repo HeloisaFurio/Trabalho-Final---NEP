@@ -1,4 +1,5 @@
 alunos = []
+cadastrosPendentes = []
 professores = []
 administradores = []
 turmas = []
