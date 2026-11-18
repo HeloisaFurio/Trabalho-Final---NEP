@@ -1073,6 +1073,9 @@ while opcao_escolhida != 0:
     elif opcao_escolhida == 8:
         login()
 
+    elif opcao_escolhida == 0:
+        print("Encerrando programa...")
+
     else:
         print("Opção inválida!")
         input("\nPressione ENTER para continuar...")
