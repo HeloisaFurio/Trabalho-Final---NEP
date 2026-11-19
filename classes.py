@@ -41,20 +41,6 @@ class Turma:
         self.professores = professores
         self.disciplinas = disciplinas
 
-# turmas = []
-# #vou crir a primeira turma
-
-# professor1 = Professor(321, "Waltrik", "walwal@gmail.com", "graduacao", "senha123")
-
-# turma_portuges2028 = Turma("2028", [], [professor1])
-# turmas.append(turma_portuges2028)
-
-# aluno1 = Aluno(123, "ignacio", "ignacio@email.com", "senha123")
-# aluno2 = Aluno(123, "ryan", "ryan@email.com", "senha123")
-
-# turmas[0].alunos.append(aluno1)
-
-
 class Disciplina:
     def __init__(self, nome: str, sigla: str, cargaHoraria: int, aulas):
         self.nome = nome

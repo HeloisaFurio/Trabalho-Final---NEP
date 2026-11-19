@@ -1,8 +1,11 @@
+
 from classes import *
 import os
 import dados
 
 
+##############################################################
+# CADASTROS
 ##############################################################
 
 def cadastroADM():
@@ -60,8 +63,10 @@ def cadastroAluno():
 
     dados.cadastrosPendentes.append(novo_aluno)
     dados.salvarDados()
+
     print("\nSolicitação de cadastro enviada!")
     print("Aguarde a aprovação de um administrador.")
+
 
 ##############################################################
 
@@ -94,12 +99,15 @@ def cadastroProfessor():
     print("\nSolicitação de cadastro enviada!")
     print("Aguarde a aprovação de um administrador.")
 
+
+##############################################################
+# MENU DO ADMINISTRADOR
 ##############################################################
 
 def menuAdministrador(admin):
-    opcao_escolhida= -1
+    opcao_escolhida = -1
 
-    while opcao_escolhida!= 0:
+    while opcao_escolhida != 0:
         limpar_tela()
         print(f"""=====================================
        ÁREA DO ADMINISTRADOR
@@ -113,24 +121,28 @@ Bem-vindo(a), {admin.nome}!
 0 - Sair
 =====================================""")
 
-        opcao_escolhida= int(input("Escolha uma opção: "))
+        opcao_escolhida = int(input("Escolha uma opção: "))
 
-        if opcao_escolhida== 1:
+        if opcao_escolhida == 1:
             gerenciarUsuarios()
-        elif opcao_escolhida== 2:
+
+        elif opcao_escolhida == 2:
             gerenciarMateriais()
-        elif opcao_escolhida== 0:
+
+        elif opcao_escolhida == 0:
             print("Saindo da área administrativa...")
+
         else:
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
 
+
 ##############################################################
 
 def gerenciarUsuarios():
-    opcao_escolhida= -1
+    opcao_escolhida = -1
 
-    while opcao_escolhida!= 0:
+    while opcao_escolhida != 0:
         limpar_tela()
         print("""=====================================
         GERENCIAR USUÁRIOS
@@ -145,21 +157,27 @@ def gerenciarUsuarios():
 0 - Voltar
 =====================================""")
 
-        opcao_escolhida= int(input("Escolha uma opção: "))
+        opcao_escolhida = int(input("Escolha uma opção: "))
 
-        if opcao_escolhida== 1:
+        if opcao_escolhida == 1:
             consultarCadastros()
-        elif opcao_escolhida== 2:
+
+        elif opcao_escolhida == 2:
             consultarAlunos()
-        elif opcao_escolhida== 3:
+
+        elif opcao_escolhida == 3:
             consultarProfessores()
-        elif opcao_escolhida== 4:
+
+        elif opcao_escolhida == 4:
             consultarAdministradores()
-        elif opcao_escolhida== 5:
+
+        elif opcao_escolhida == 5:
             removerUsuario()
-        elif opcao_escolhida!= 0:
+
+        elif opcao_escolhida != 0:
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
+
 
 ##############################################################
 
@@ -193,23 +211,30 @@ def consultarCadastros():
         print("\n1 - Selecionar cadastro")
         print("0 - Voltar")
 
-        opcao_escolhida= input("\nEscolha uma opção: ")
+        opcao_escolhida = input("\nEscolha uma opção: ")
 
-        if opcao_escolhida== "1":
-            numero = int(input("Número do cadastro: "))
+        if opcao_escolhida == "1":
+            try:
+                numero = int(input("Número do cadastro: "))
 
-            if 1 <= numero <= len(dados.cadastrosPendentes):
-                analisarCadastro(numero - 1)
-            else:
-                print("Cadastro inválido!")
+                if 1 <= numero <= len(dados.cadastrosPendentes):
+                    analisarCadastro(numero - 1)
+
+                else:
+                    print("Cadastro inválido!")
+                    input("\nPressione ENTER para continuar...")
+
+            except ValueError:
+                print("Digite um número válido!")
                 input("\nPressione ENTER para continuar...")
 
-        elif opcao_escolhida== "0":
+        elif opcao_escolhida == "0":
             return
 
         else:
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
+
 
 ##############################################################
 
@@ -241,6 +266,11 @@ def analisarCadastro(indice):
     if opcao_escolhida == "1":
 
         if isinstance(usuario, Aluno):
+            matriculas = [
+                aluno.matricula for aluno in dados.alunos
+            ]
+            usuario.matricula = max(matriculas, default=0) + 1
+
             dados.alunos.append(usuario)
             dados.vagasAlunos -= 1
 
@@ -248,6 +278,12 @@ def analisarCadastro(indice):
                 dados.turmas[0].alunos.append(usuario)
 
         elif isinstance(usuario, Professor):
+            matriculas = [
+                professor.matricula
+                for professor in dados.professores
+            ]
+            usuario.matricula = max(matriculas, default=0) + 1
+
             dados.professores.append(usuario)
 
             if len(dados.turmas) > 0:
@@ -275,6 +311,9 @@ def analisarCadastro(indice):
 
     input("\nPressione ENTER para continuar...")
 
+
+##############################################################
+# CONSULTAR USUÁRIOS
 ##############################################################
 
 def consultarAlunos():
@@ -290,6 +329,7 @@ def consultarAlunos():
             print("-------------------------------------")
 
     input("\nPressione ENTER para voltar...")
+
 
 ##############################################################
 
@@ -307,6 +347,7 @@ def consultarProfessores():
 
     input("\nPressione ENTER para voltar...")
 
+
 ##############################################################
 
 def consultarAdministradores():
@@ -323,6 +364,9 @@ def consultarAdministradores():
 
     input("\nPressione ENTER para voltar...")
 
+
+##############################################################
+# REMOVER USUÁRIOS
 ##############################################################
 
 def removerUsuario():
@@ -383,13 +427,30 @@ def removerUsuario():
             usuario = lista[numero - 1]
 
             print(f"\nUsuário selecionado: {usuario.nome}")
-            confirmar = input("Deseja realmente remover? (s/n): ").lower()
+            confirmar = input(
+                "Deseja realmente remover? (s/n): "
+            ).lower()
 
             if confirmar == "s":
                 lista.pop(numero - 1)
 
                 if tipo == "aluno":
                     dados.vagasAlunos += 1
+
+                    if len(dados.turmas) > 0:
+                        dados.turmas[0].alunos = [
+                            aluno
+                            for aluno in dados.turmas[0].alunos
+                            if aluno.email != usuario.email
+                        ]
+
+                elif tipo == "professor":
+                    if len(dados.turmas) > 0:
+                        dados.turmas[0].professores = [
+                            professor
+                            for professor in dados.turmas[0].professores
+                            if professor.email != usuario.email
+                        ]
 
                 dados.salvarDados()
                 print("\nUsuário removido com sucesso!")
@@ -402,12 +463,15 @@ def removerUsuario():
 
         input("\nPressione ENTER para continuar...")
 
+
+##############################################################
+# GERENCIAR MATERIAIS
 ##############################################################
 
 def gerenciarMateriais():
-    opcao_escolhida= -1
+    opcao_escolhida = -1
 
-    while opcao_escolhida!= 0:
+    while opcao_escolhida != 0:
         limpar_tela()
         print("""=====================================
         GERENCIAR MATERIAIS
@@ -422,21 +486,27 @@ def gerenciarMateriais():
 0 - Voltar
 =====================================""")
 
-        opcao_escolhida= int(input("Escolha uma opção: "))
+        opcao_escolhida = int(input("Escolha uma opção: "))
 
-        if opcao_escolhida== 1:
+        if opcao_escolhida == 1:
             cadastrarAula()
-        elif opcao_escolhida== 2:
+
+        elif opcao_escolhida == 2:
             cadastrarConteudo()
-        elif opcao_escolhida== 3:
+
+        elif opcao_escolhida == 3:
             cadastrarResumo()
-        elif opcao_escolhida== 4:
+
+        elif opcao_escolhida == 4:
             consultarMateriais()
-        elif opcao_escolhida== 5:
+
+        elif opcao_escolhida == 5:
             removerMaterial()
-        elif opcao_escolhida!= 0:
+
+        elif opcao_escolhida != 0:
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
+
 
 ##############################################################
 
@@ -471,6 +541,7 @@ def cadastrarAula():
             if 1 <= opcao <= len(dados.conteudos):
                 conteudosAula.append(dados.conteudos[opcao - 1])
                 print("Conteúdo adicionado!")
+
             else:
                 print("Opção inválida!")
 
@@ -484,6 +555,7 @@ def cadastrarAula():
 
     print("\nAula cadastrada com sucesso!")
     input("\nPressione ENTER para voltar...")
+
 
 ##############################################################
 
@@ -502,6 +574,7 @@ def cadastrarConteudo():
 
     print("\nConteúdo cadastrado com sucesso!")
     input("\nPressione ENTER para voltar...")
+
 
 ##############################################################
 
@@ -556,6 +629,7 @@ def cadastrarResumo():
 
     input("\nPressione ENTER para voltar...")
 
+
 ##############################################################
 
 def consultarMateriais():
@@ -580,6 +654,7 @@ def consultarMateriais():
 
             if len(dados.aulas) == 0:
                 print("\nNão existem aulas cadastradas.")
+
             else:
                 for i, aula in enumerate(dados.aulas):
                     print(f"\nAula {i + 1}")
@@ -588,8 +663,10 @@ def consultarMateriais():
                     print(f"Data: {aula.data}")
 
                     print("Conteúdos:")
+
                     if len(aula.conteudos) == 0:
                         print("Nenhum conteúdo associado.")
+
                     else:
                         for conteudo in aula.conteudos:
                             print(f"- {conteudo.titulo}")
@@ -604,6 +681,7 @@ def consultarMateriais():
 
             if len(dados.conteudos) == 0:
                 print("\nNão existem conteúdos cadastrados.")
+
             else:
                 for i, conteudo in enumerate(dados.conteudos):
                     print(f"\nConteúdo {i + 1}")
@@ -620,6 +698,7 @@ def consultarMateriais():
 
             if len(dados.resumos) == 0:
                 print("\nNão existem resumos cadastrados.")
+
             else:
                 for resumo in dados.resumos:
                     print(resumo.listarResumo())
@@ -633,6 +712,7 @@ def consultarMateriais():
         else:
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
+
 
 ##############################################################
 
@@ -710,6 +790,9 @@ def removerMaterial():
 
         input("\nPressione ENTER para continuar...")
 
+
+##############################################################
+# MENU DO ALUNO
 ##############################################################
 
 def menuAluno(aluno):
@@ -752,6 +835,7 @@ Bem-vindo(a), {aluno.nome}!
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
 
+
 ##############################################################
 
 def consultarAulasAluno():
@@ -783,6 +867,7 @@ Conteúdos:
 
     input("\nPressione ENTER para voltar...")
 
+
 ##############################################################
 
 def consultarConteudosAluno():
@@ -804,6 +889,7 @@ Fonte: {conteudo.fonte}
 
     input("\nPressione ENTER para voltar...")
 
+
 ##############################################################
 
 def consultarDadosAluno(aluno):
@@ -817,6 +903,7 @@ E-mail: {aluno.email}
 """)
 
     input("\nPressione ENTER para voltar...")
+
 
 ##############################################################
 
@@ -836,6 +923,7 @@ def consultarTurmaAluno(aluno):
 
         if len(turma.alunos) == 0:
             print("Nenhum aluno cadastrado na turma.")
+
         else:
             for colega in turma.alunos:
                 print(colega.listarAluno())
@@ -844,12 +932,16 @@ def consultarTurmaAluno(aluno):
 
         if len(turma.professores) == 0:
             print("Nenhum professor associado à turma.")
+
         else:
             for professor in turma.professores:
                 print(professor.listarProf())
 
     input("\nPressione ENTER para voltar...")
 
+
+##############################################################
+# MENU DO PROFESSOR
 ##############################################################
 
 def menuProfessor(professor):
@@ -900,6 +992,7 @@ Bem-vindo(a), {professor.nome}!
             print("Opção inválida!")
             input("\nPressione ENTER para continuar...")
 
+
 ##############################################################
 
 def consultarTurmaProfessor():
@@ -918,6 +1011,7 @@ def consultarTurmaProfessor():
 
         if len(turma.alunos) == 0:
             print("Nenhum aluno cadastrado na turma.")
+
         else:
             for aluno in turma.alunos:
                 print(aluno.listarAluno())
@@ -926,12 +1020,16 @@ def consultarTurmaProfessor():
 
         if len(turma.professores) == 0:
             print("Nenhum professor associado à turma.")
+
         else:
             for prof in turma.professores:
                 print(prof.listarProf())
 
     input("\nPressione ENTER para voltar...")
 
+
+##############################################################
+# LOGIN
 ##############################################################
 
 def login():
@@ -961,37 +1059,119 @@ def login():
 
 
 ##############################################################
+# CONFIGURAÇÕES INICIAIS
+##############################################################
+
+# Criar administradores iniciais, caso não existam
 
 if len(dados.administradores) == 0:
 
-    helo = Administrador("Heloisa Furio Castilho", "heloisa.fc14@aluno.ifsc.edu.br", "1410")
-    juh = Administrador("Julia Zulian Lima", "julia.zl2010@aluno.ifsc.edu.br", "2201")
+    helo = Administrador(
+        "Heloisa Furio Castilho",
+        "heloisa.fc14@aluno.ifsc.edu.br",
+        "1410"
+    )
+
+    juh = Administrador(
+        "Julia Zulian Lima",
+        "julia.zl2010@aluno.ifsc.edu.br",
+        "2201"
+    )
 
     dados.administradores.append(helo)
     dados.administradores.append(juh)
 
-    
 
 ##############################################################
 
-if len(dados.turmas) == 0:
-    turma = Turma(2026, dados.alunos, dados.professores, dados.disciplinas)
+# Criar a turma, caso não exista
 
+if len(dados.turmas) == 0:
+    turma = Turma(2026, [], [], dados.disciplinas)
     dados.turmas.append(turma)
 
+
+##############################################################
+
+# Remover alunos duplicados pelo e-mail
+
+alunos_unicos = []
+
+for aluno in dados.alunos:
+    if not any(a.email == aluno.email for a in alunos_unicos):
+        alunos_unicos.append(aluno)
+
+dados.alunos[:] = alunos_unicos
+
+
+##############################################################
+
+# Remover professores duplicados pelo e-mail
+
+professores_unicos = []
+
+for professor in dados.professores:
+    if not any(p.email == professor.email for p in professores_unicos):
+        professores_unicos.append(professor)
+
+dados.professores[:] = professores_unicos
+
+
+##############################################################
+
+# Corrigir matrículas dos alunos antigos
+
+matricula = 1
+
+for aluno in dados.alunos:
+    if aluno.matricula <= 0:
+        aluno.matricula = matricula
+
+    matricula = max(matricula, aluno.matricula + 1)
+
+
+##############################################################
+
+# Corrigir matrículas dos professores antigos
+
+matricula = 1
+
+for professor in dados.professores:
+    if professor.matricula <= 0:
+        professor.matricula = matricula
+
+    matricula = max(matricula, professor.matricula + 1)
+
+
+##############################################################
+
+# Atualizar os integrantes da turma
+
+dados.turmas[0].alunos = dados.alunos.copy()
+dados.turmas[0].professores = dados.professores.copy()
+
+
+##############################################################
+# LIMPAR TELA
 ##############################################################
 
 def limpar_tela():
     os.system("cls" if os.name == "nt" else "clear")
 
+
+##############################################################
+# SALVAR DADOS
 ##############################################################
 
 dados.salvarDados()
 
+
+##############################################################
+# MENU INICIAL
 ##############################################################
 
 menuInicial = """=====================================
-  NEP(Núcleo de Estudos Políticos)
+  NEP (Núcleo de Estudos Políticos)
 =====================================
 
 Olá! Seja bem-vindo ao nosso curso!
@@ -1015,6 +1195,7 @@ ACESSO:
 ====================================="""
 
 opcao_escolhida = -1
+
 while opcao_escolhida != 0:
     limpar_tela()
     print(menuInicial)
@@ -1026,27 +1207,35 @@ while opcao_escolhida != 0:
         print("""    O projeto é um curso local, gratuito e anual
     de formação política, voltado principalmente para
     jovens, com aulas semanais e apoio de uma plataforma
-    online própria. Com foco na pluralidade de ideias, transparência
-    e fontes confiáveis, a iniciativa busca desenvolver o pensamento crítico
-    sem defender uma ideologia específica, preparando os alunos para
-    uma participação cidadã mais consciente.""")
+    online própria. Com foco na pluralidade de ideias,
+    transparência e fontes confiáveis, a iniciativa busca
+    desenvolver o pensamento crítico sem defender uma
+    ideologia específica, preparando os alunos para uma
+    participação cidadã mais consciente.""")
+
         input("\nPressione ENTER para voltar...")
 
     elif opcao_escolhida == 2:
         limpar_tela()
         print("Equipe responsável pelo projeto:\n")
+
         for admin in dados.administradores:
             print(admin.listarADM())
+
         input("\nPressione ENTER para voltar...")
 
     elif opcao_escolhida == 3:
         limpar_tela()
-        print(f"O número de vagas disponíveis para alunos no NEP(Núcleo de Estudos Políticos) é de {dados.vagasAlunos} vagas")
+        print(
+            f"O número de vagas disponíveis para alunos no "
+            f"NEP (Núcleo de Estudos Políticos) é de "
+            f"{dados.vagasAlunos} vagas"
+        )
+
         input("\nPressione ENTER para voltar...")
 
     elif opcao_escolhida == 4:
         limpar_tela()
-
         print("===== RESUMOS DAS AULAS =====")
 
         if len(dados.resumos) == 0:
@@ -1056,6 +1245,7 @@ while opcao_escolhida != 0:
             for resumo in dados.resumos:
                 print(resumo.listarResumo())
                 print("-----------------------------")
+
         input("\nPressione ENTER para voltar...")
 
     elif opcao_escolhida == 5:
